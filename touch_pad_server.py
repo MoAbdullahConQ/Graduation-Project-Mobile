@@ -1,3 +1,4 @@
+import time
 from flask_socketio import SocketIO
 from flask import Flask
 import pyautogui
@@ -16,6 +17,32 @@ last_move_time = time.time()
 # Minimum time between movements (in seconds)
 MIN_MOVE_INTERVAL = 0.01  # 10 milliseconds
 
+
+@socketio.on('mouse_move')
+def handle_mouse_move(data):
+    global last_move_time
+    current_time = time.time()
+    
+    # Check the time elapsed since the last movement
+    if current_time - last_move_time < MIN_MOVE_INTERVAL:
+        return  # Ignore very repetitive movements.
+        
+    dx = data.get('dx', 0)
+    dy = data.get('dy', 0)
+    
+    if abs(dx) < 0.1 and abs(dy) < 0.1:
+        return  # Ignore very small movements
+    
+    # Speed ​​coefficient application
+    dx = dx * MOUSE_SPEED
+    dy = dy * MOUSE_SPEED
+    
+    # mouse move
+    pyautogui.move(dx, dy)
+    print(f"Mouse Move: dx={dx}, dy={dy}")
+    
+    # Update last movement time    
+    last_move_time = current_time
 
 
 
