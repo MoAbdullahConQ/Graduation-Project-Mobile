@@ -45,6 +45,10 @@ def handle_mouse_move(data):
     last_move_time = current_time
 
 
+@socketio.on('mouse_stop')
+def handle_mouse_stop():
+    print("🛑 Mouse Stop")
+
 
 if __name__=="__main__":
     print("Starting Mouse Server...")
