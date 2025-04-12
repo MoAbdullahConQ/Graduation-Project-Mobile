@@ -45,6 +45,16 @@ def handle_mouse_move(data):
     last_move_time = current_time
 
 
+@socketio.on('mouse_command')
+def handle_mouse_command(command):
+    print(f"Order received: {command}")
+    
+    if command == "click":
+        pyautogui.click()
+    if command == "right_click":
+        pyautogui.rightClick()
+
+
 @socketio.on('mouse_stop')
 def handle_mouse_stop():
     print("🛑 Mouse Stop")
