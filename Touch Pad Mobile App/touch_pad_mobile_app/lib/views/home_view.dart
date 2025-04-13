@@ -151,7 +151,7 @@ class _HomeViewState extends State<HomeView> {
               onLongPress: handleRightClick,
               onTap: handleLeftClick,
               child: Container(
-                height: 300,
+                height: 350,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.blue.shade300,
