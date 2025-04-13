@@ -92,6 +92,11 @@ class _HomeViewState extends State<HomeView> {
     accumulatedDy += details.delta.dy;
   }
 
+  void handleLeftClick() {
+    socket.emit('mouse_command', 'click');
+    print('📤 Sent command: Left Click');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,6 +133,7 @@ class _HomeViewState extends State<HomeView> {
             SizedBox(height: 100),
             GestureDetector(
               onPanUpdate: handleSwipe,
+              onTap: handleLeftClick,
               child: Container(
                 height: 300,
                 width: double.infinity,
@@ -151,7 +157,7 @@ class _HomeViewState extends State<HomeView> {
                   child: CustomBtn(
                     text: 'Left Click',
                     bkColor: Colors.blue,
-                    onPressed: () {},
+                    onPressed: handleLeftClick,
                   ),
                 ),
                 SizedBox(width: 20),
