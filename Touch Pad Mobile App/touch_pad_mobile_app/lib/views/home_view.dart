@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:socket_io_client_flutter/socket_io_client_flutter.dart' as IO;
 import 'package:touch_pad_mobile_app/widgets/custom_btn.dart';
@@ -12,6 +14,12 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   late IO.Socket socket;
   bool isConnected = false;
+
+  // مؤقت لإرسال الحركة
+  Timer? _movementTimer;
+
+  // وقت بين الإرسالات (بالملي ثانية)
+  final int throttleTime = 50; // 50ms = 20 updates per second
 
   @override
   void initState() {
@@ -35,6 +43,19 @@ class _HomeViewState extends State<HomeView> {
         isConnected = false;
       });
     });
+
+    // Start timer to send movement
+    _startMovementTimer();
+  }
+
+  void _startMovementTimer() {
+    _movementTimer?.cancel();
+    _movementTimer = Timer.periodic(
+      Duration(milliseconds: throttleTime),
+      (timer) {
+        // here is code that send every 50ms
+      },
+    );
   }
 
   @override
