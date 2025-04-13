@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:touch_pad_mobile_app/views/home_view.dart';
 
 class IpQrView extends StatefulWidget {
   const IpQrView({super.key});
@@ -64,7 +65,10 @@ class _IpQrViewState extends State<IpQrView> {
               ElevatedButton(
                 onPressed: () {
                   if (formState.currentState!.validate()) {
-                    // code
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeView()),
+                    );
                   } else {
                     print('not valid---------------');
                   }
