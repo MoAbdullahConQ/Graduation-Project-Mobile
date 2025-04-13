@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socket_io_client_flutter/socket_io_client_flutter.dart' as IO;
 import 'package:touch_pad_mobile_app/widgets/custom_btn.dart';
 
 class HomeView extends StatefulWidget {
@@ -9,7 +10,32 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  late IO.Socket socket;
   bool isConnected = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    socket = IO.io('http://192.168.1.36:5000', <String, dynamic>{
+      'transports': ['websocket'], // Fast direct connection using WebSocket
+      'autoConnect': true, // The connection starts automatically
+    });
+
+    socket.onConnect((data) {
+      print('✅ Connected to server');
+      setState(() {
+        isConnected = true;
+      });
+    });
+
+    socket.onDisconnect((_) {
+      print('❌ Disconnected from server');
+      setState(() {
+        isConnected = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
