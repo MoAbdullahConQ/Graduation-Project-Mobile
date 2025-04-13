@@ -191,4 +191,12 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _movementTimer?.cancel();
+    socket.disconnect();
+    socket.dispose();
+    super.dispose();
+  }
 }
