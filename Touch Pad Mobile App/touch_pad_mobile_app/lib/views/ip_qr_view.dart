@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:touch_pad_mobile_app/views/home_view.dart';
+import 'package:touch_pad_mobile_app/widgets/custom_btn.dart';
 
 class IpQrView extends StatefulWidget {
   const IpQrView({super.key});
@@ -62,7 +63,9 @@ class _IpQrViewState extends State<IpQrView> {
                 ),
               ),
               SizedBox(height: 30),
-              ElevatedButton(
+              CustomBtn(
+                text: 'Go To Touchpad',
+                bkColor: Colors.blue,
                 onPressed: () {
                   if (formState.currentState!.validate()) {
                     Navigator.push(
@@ -73,17 +76,6 @@ class _IpQrViewState extends State<IpQrView> {
                     print('not valid---------------');
                   }
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  minimumSize: Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                child: Text(
-                  'Go To Touchpad',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
               ),
             ],
           ),

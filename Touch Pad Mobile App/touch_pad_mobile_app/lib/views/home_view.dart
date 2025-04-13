@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:touch_pad_mobile_app/widgets/custom_btn.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -13,7 +14,9 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Touchpad Remote Control'),
         actions: [
           Container(
@@ -29,7 +32,48 @@ class _HomeViewState extends State<HomeView> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        child: Column(children: [Text('data')]),
+        child: Column(
+          children: [
+            SizedBox(height: 100),
+            Container(
+              height: 300,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.blue.shade300,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: GestureDetector(
+                child: Center(
+                  child: Text(
+                    'Moving Mouse here \n OR \n Left Click',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 30),
+            Row(
+              children: [
+                Expanded(
+                  child: CustomBtn(
+                    text: 'Left Click',
+                    bkColor: Colors.blue,
+                    onPressed: () {},
+                  ),
+                ),
+                SizedBox(width: 20),
+                Expanded(
+                  child: CustomBtn(
+                    text: 'Right Click',
+                    bkColor: Colors.blue,
+                    onPressed: () {},
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
