@@ -83,6 +83,12 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
+  void handleSwipe(DragUpdateDetails details) {
+    // Collect changes in motion
+    accumulatedDx += details.delta.dx;
+    accumulatedDy += details.delta.dy;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,14 +113,15 @@ class _HomeViewState extends State<HomeView> {
         child: Column(
           children: [
             SizedBox(height: 100),
-            Container(
-              height: 300,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.blue.shade300,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: GestureDetector(
+            GestureDetector(
+              onPanUpdate: handleSwipe,
+              child: Container(
+                height: 300,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade300,
+                  borderRadius: BorderRadius.circular(16),
+                ),
                 child: Center(
                   child: Text(
                     'Moving Mouse here \n OR \n Left Click',
