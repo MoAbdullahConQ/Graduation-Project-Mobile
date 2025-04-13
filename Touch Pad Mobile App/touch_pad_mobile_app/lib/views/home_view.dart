@@ -102,6 +102,15 @@ class _HomeViewState extends State<HomeView> {
     print('📤 Sent command: right click');
   }
 
+  void handlePanEnd(DragEndDetails details) {
+    accumulatedDx = 0;
+    accumulatedDy = 0;
+
+    // (Optional) Send a message to the server to confirm the stop.
+    socket.emit('mouse_stop');
+    print('🛑 Stopped movement');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,6 +147,7 @@ class _HomeViewState extends State<HomeView> {
             SizedBox(height: 100),
             GestureDetector(
               onPanUpdate: handleSwipe,
+              onPanEnd: handlePanEnd,
               onLongPress: handleRightClick,
               onTap: handleLeftClick,
               child: Container(
