@@ -21,7 +21,7 @@ class CustomBtn extends StatelessWidget {
         minimumSize: Size(double.infinity, 50),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
-      child: Text(text, style: TextStyle(fontSize: 18)),
+      child: Text(text, style: TextStyle(fontSize: 18, color: Colors.white)),
     );
   }
 }

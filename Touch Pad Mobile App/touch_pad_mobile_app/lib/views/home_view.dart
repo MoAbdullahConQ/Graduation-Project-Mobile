@@ -14,6 +14,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   late IO.Socket socket;
   bool isConnected = false;
+  String stateConnect = "OFF";
 
   // Timer to send movement
   Timer? _movementTimer;
@@ -41,6 +42,7 @@ class _HomeViewState extends State<HomeView> {
       print('✅ Connected to server');
       setState(() {
         isConnected = true;
+        stateConnect = 'ON';
       });
     });
 
@@ -48,6 +50,7 @@ class _HomeViewState extends State<HomeView> {
       print('❌ Disconnected from server');
       setState(() {
         isConnected = false;
+        stateConnect = 'OFF';
       });
     });
 
@@ -95,15 +98,25 @@ class _HomeViewState extends State<HomeView> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        backgroundColor: Colors.blue,
         title: Text('Touchpad Remote Control'),
         actions: [
+          Center(
+            child: Text(
+              stateConnect,
+              style: TextStyle(
+                fontSize: 18,
+                color: isConnected ? Colors.lightGreenAccent : Colors.red,
+              ),
+            ),
+          ),
           Container(
-            margin: EdgeInsets.all(15),
+            margin: EdgeInsets.only(right: 15, left: 10),
             width: 15,
             height: 15,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isConnected ? Colors.green : Colors.red,
+              color: isConnected ? Colors.lightGreenAccent : Colors.red,
             ),
           ),
         ],
