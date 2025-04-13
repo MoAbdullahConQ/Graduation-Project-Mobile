@@ -15,11 +15,18 @@ class _HomeViewState extends State<HomeView> {
   late IO.Socket socket;
   bool isConnected = false;
 
-  // مؤقت لإرسال الحركة
+  // Timer to send movement
   Timer? _movementTimer;
 
-  // وقت بين الإرسالات (بالملي ثانية)
+  // Time between transmissions (in milliseconds)
   final int throttleTime = 50; // 50ms = 20 updates per second
+
+  // Store cumulative movement
+  double accumulatedDx = 0;
+  double accumulatedDy = 0;
+
+  //Motion speed factor
+  final double speedMultiplier = 2.5;
 
   @override
   void initState() {
@@ -50,12 +57,30 @@ class _HomeViewState extends State<HomeView> {
 
   void _startMovementTimer() {
     _movementTimer?.cancel();
-    _movementTimer = Timer.periodic(
-      Duration(milliseconds: throttleTime),
-      (timer) {
-        // here is code that send every 50ms
-      },
-    );
+    _movementTimer = Timer.periodic(Duration(milliseconds: throttleTime), (
+      timer,
+    ) {
+      // here is code that send every 50ms
+      _sendAccumulatedMovement();
+    });
+  }
+
+  void _sendAccumulatedMovement() {
+    // Send accumulated traffic only if it exceeds a certain value
+    if (accumulatedDx.abs() > 0.1 || accumulatedDy.abs() > 0.1) {
+      socket.emit('mouse_move', {
+        'dx': accumulatedDx * speedMultiplier,
+        'dy': accumulatedDy * speedMultiplier,
+      });
+
+      print(
+        '📤 Sent movement: dx=${accumulatedDx * speedMultiplier}, dy=${accumulatedDy * speedMultiplier}',
+      );
+
+      // Reset accumulated movement
+      accumulatedDx = 0;
+      accumulatedDy = 0;
+    }
   }
 
   @override
