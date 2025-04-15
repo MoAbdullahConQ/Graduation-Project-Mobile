@@ -5,7 +5,9 @@ import 'package:socket_io_client_flutter/socket_io_client_flutter.dart' as IO;
 import 'package:touch_pad_mobile_app/widgets/custom_btn.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({super.key, required this.ip});
+
+  final String ip;
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -32,26 +34,31 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+    //192.168.1.36
 
-    socket = IO.io('http://192.168.1.36:5000', <String, dynamic>{
+    socket = IO.io('http://${widget.ip}:5000', <String, dynamic>{
       'transports': ['websocket'], // Fast direct connection using WebSocket
       'autoConnect': true, // The connection starts automatically
     });
 
     socket.onConnect((data) {
       print('✅ Connected to server');
-      setState(() {
-        isConnected = true;
-        stateConnect = 'ON';
-      });
+      if (mounted) {
+        setState(() {
+          isConnected = true;
+          stateConnect = 'ON';
+        });
+      }
     });
 
     socket.onDisconnect((_) {
       print('❌ Disconnected from server');
-      setState(() {
-        isConnected = false;
-        stateConnect = 'OFF';
-      });
+      if (mounted) {
+        setState(() {
+          isConnected = false;
+          stateConnect = 'OFF';
+        });
+      }
     });
 
     // Start timer to send movement
@@ -69,6 +76,8 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _sendAccumulatedMovement() {
+    if (!mounted || !socket.connected) return;
+
     // Send accumulated traffic only if it exceeds a certain value
     if (accumulatedDx.abs() > 0.1 || accumulatedDy.abs() > 0.1) {
       socket.emit('mouse_move', {
@@ -195,6 +204,11 @@ class _HomeViewState extends State<HomeView> {
   @override
   void dispose() {
     _movementTimer?.cancel();
+
+    // Remove socket listeners to avoid calling setState after dispose
+    socket.off('connect');
+    socket.off('disconnect');
+
     socket.disconnect();
     socket.dispose();
     super.dispose();

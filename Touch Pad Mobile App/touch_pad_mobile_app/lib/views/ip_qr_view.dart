@@ -39,13 +39,23 @@ class _IpQrViewState extends State<IpQrView> {
               SizedBox(height: 10),
               TextFormField(
                 validator: (value) {
-                  if (value == '') {
-                    return 'can\'t empty';
+                  if (value == null || value.isEmpty) {
+                    return 'Can\'t be empty';
                   }
+                  // Check IP format using RegExp
+                  final ipRegExp = RegExp(
+                    r'^((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}'
+                    r'(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)$',
+                  );
+
+                  if (!ipRegExp.hasMatch(value)) {
+                    return 'Enter a valid IP address';
+                  }
+
                   return null;
                 },
                 controller: ip,
-                keyboardType: TextInputType.url,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   label: Text('Enter Desktop Ip'),
                   suffixIcon: IconButton(
@@ -70,7 +80,9 @@ class _IpQrViewState extends State<IpQrView> {
                   if (formState.currentState!.validate()) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeView()),
+                      MaterialPageRoute(
+                        builder: (context) => HomeView(ip: ip.text),
+                      ),
                     );
                   } else {
                     print('not valid---------------');
