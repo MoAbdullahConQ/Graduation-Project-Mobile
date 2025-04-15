@@ -39,8 +39,8 @@ class _IpQrViewState extends State<IpQrView> {
               SizedBox(height: 10),
               TextFormField(
                 validator: (value) {
-                  if (value == '') {
-                    return 'can\'t empty';
+                  if (value == null || value.isEmpty) {
+                    return 'Can\'t be empty';
                   }
                   return null;
                 },
