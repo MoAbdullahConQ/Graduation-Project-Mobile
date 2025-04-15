@@ -70,7 +70,9 @@ class _IpQrViewState extends State<IpQrView> {
                   if (formState.currentState!.validate()) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeView()),
+                      MaterialPageRoute(
+                        builder: (context) => HomeView(ip: ip.text),
+                      ),
                     );
                   } else {
                     print('not valid---------------');

@@ -5,7 +5,9 @@ import 'package:socket_io_client_flutter/socket_io_client_flutter.dart' as IO;
 import 'package:touch_pad_mobile_app/widgets/custom_btn.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({super.key, required this.ip});
+
+  final String ip;
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -32,8 +34,9 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+    //192.168.1.36
 
-    socket = IO.io('http://192.168.1.36:5000', <String, dynamic>{
+    socket = IO.io('http://${widget.ip}:5000', <String, dynamic>{
       'transports': ['websocket'], // Fast direct connection using WebSocket
       'autoConnect': true, // The connection starts automatically
     });
