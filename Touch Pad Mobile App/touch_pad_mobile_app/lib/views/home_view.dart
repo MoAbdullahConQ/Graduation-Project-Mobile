@@ -43,18 +43,22 @@ class _HomeViewState extends State<HomeView> {
 
     socket.onConnect((data) {
       print('✅ Connected to server');
-      setState(() {
-        isConnected = true;
-        stateConnect = 'ON';
-      });
+      if (mounted) {
+        setState(() {
+          isConnected = true;
+          stateConnect = 'ON';
+        });
+      }
     });
 
     socket.onDisconnect((_) {
       print('❌ Disconnected from server');
-      setState(() {
-        isConnected = false;
-        stateConnect = 'OFF';
-      });
+      if (mounted) {
+        setState(() {
+          isConnected = false;
+          stateConnect = 'OFF';
+        });
+      }
     });
 
     // Start timer to send movement
@@ -72,6 +76,8 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _sendAccumulatedMovement() {
+    if (!mounted || !socket.connected) return;
+
     // Send accumulated traffic only if it exceeds a certain value
     if (accumulatedDx.abs() > 0.1 || accumulatedDy.abs() > 0.1) {
       socket.emit('mouse_move', {
@@ -198,6 +204,11 @@ class _HomeViewState extends State<HomeView> {
   @override
   void dispose() {
     _movementTimer?.cancel();
+
+    // Remove socket listeners to avoid calling setState after dispose
+    socket.off('connect');
+    socket.off('disconnect');
+
     socket.disconnect();
     socket.dispose();
     super.dispose();
